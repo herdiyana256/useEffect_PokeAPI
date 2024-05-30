@@ -1,0 +1,67 @@
+3. Proyek dengan useEffect(2)
+
+Disini, kita akan melihat pada contoh ke-2 dan belajar bagaimana mengambil data dari API eksternal menggunakan useEffect.
+npm create vite@latest react-api -- --template react
+cd react-api
+npm install
+npm run dev
+Kita akan menggunakan PokeApi pada proyek ini dan mengembangkan aplikasi simpel seperti di bawah.
+
+Berkenaan dengan "Fair Use Policy" dan endpoint-endpoint yang dapat kamu gunakan, silakan mengacu pada documentasi PokeApi.
+
+Mari kita mulai pengembangannya! Pertama, buat file baru dibawah.
+
+
+Selanjunya, kita akan mendapatkan 10 daftar pokemon dari PokeApi dan menampilkannya seperti di bawah. Perbarui code di App.jsx dan PokeList.jsx.
+
+App.jsx
+import { useState, useEffect } from "react"
+import PokeList from "./components/PokeList"
+
+function App() {
+  const [pokemonList, setPokemonList] = useState([])
+
+  useEffect(() => {
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=10")
+      .then((res) => res.json())
+      .then((data) => setPokemonList(data.results))
+      .catch((err) => console.log(err))
+  }, [])
+
+  return (
+    <div style={styles.container}>
+      <h2>PokeAPI</h2>
+      <PokeList pokemonList={pokemonList} />
+    </div>
+  )
+}
+
+const styles = {
+  container: {
+    width: "50%",
+    margin: "0 auto",
+    padding: "80px",
+    textAlign: "center",
+  },
+}
+
+export default App
+
+Bisa kamu lihat, useEffect digunakan di sini. Mari kita lihat apa yang dilakukan oleh code-nya.
+1. Mendefinisikan state pokemonList
+const [pokemonList, setPokemonList] = useState([])
+2. Mendapatkan data Pokemon dari PokeApi dan menetapkan nilainya pada state pokemonList
+useEffect(() => {
+  fetch("https://pokeapi.co/api/v2/pokemon?limit=10")
+    .then((res) => res.json())
+    .then((data) => setPokemonList(data.results))
+    .catch((err) => console.log(err))
+}, [])
+useEffect diperlukan di sini karena mengakses API eksternal merupakan side effect.
+Code ini mendapatkan data dari endpoint-nya PokeApi menggunakan method fetch dan mengatur data awalnya dengan setPokemonList(data.results).
+Karena useEffect ini hanya dibutuhkan pada awal render untuk menyiapkan data awalnya, dependency [] ditambahkan (= useEffect ini tidak dijalankan ketika state diperbarui.).
+
+
+
+
+
